@@ -1,3 +1,4 @@
+import { Scene } from "./debug/scene.ts";
 import { Window } from "./src/app/web/window.ts";
 import { Element } from "./src/node/node.ts";
 import { FrameBuffer } from "./src/view/frame_buffer.ts";
@@ -40,6 +41,10 @@ function getXY(x: number, f: (x: number) => number) {
       const y = Math.max(Math.min(9, Math.round(f(x))), 0);
       return [x,y];
 }
+const scene = new Scene(window);
+
+scene.style.top = 10;
+
 window.addEventListener('update', () => {
       shader.clear();
       for (let i = 0; i < 10; i++) {

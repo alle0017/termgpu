@@ -28,7 +28,6 @@ export abstract class Node {
 }
 export class Element extends Node {
       public children: Node[] = [];
-
       public override draw(buffer: FrameBuffer) {
             super.draw(buffer);
             this.style.positionChildren(this.children);
@@ -61,7 +60,7 @@ export class Element extends Node {
       }
       public override toString() {
             const tag = Object.getPrototypeOf(this).constructor.name;
-            return `<${tag}${this.id ? ` #${this.id}`: ''}${this.classNames.size > 0 ? [' ', ...this.classNames].join('.'): ''}>${this.children.map(c => c.toString()).join('')}</${tag}>`
+            return `<${tag}${this.id ? ` #${this.id}`: ''}${this.classNames.size > 0 ? [' ', ...this.classNames].join('.'): ''}>\n${this.children.map(c => c.toString()).join('\n')}</${tag}>`
       }
 }
 

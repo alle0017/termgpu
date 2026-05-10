@@ -10,6 +10,7 @@ type ElementsMap = {
 }
 
 export class HTMLDivElement extends Element {}
+export class HTMLBodyElement extends Element {}
 export class HTMLUnderlineElement extends Element {
       constructor() {
             super();
@@ -36,7 +37,7 @@ export class Document extends EventDispatcher<DocumentEventMap> {
 
       constructor(width: number, height: number) {
             super();
-            this.body = new Element();
+            this.body = new HTMLBodyElement();
             this.body.style.width = width;
             this.body.style.height = height;
       }
