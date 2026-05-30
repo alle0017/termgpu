@@ -1,10 +1,7 @@
 import { EventDispatcher } from "../../events/event_dispatcher.ts";
-import { loop } from "../loop.ts";
 import { Document } from "./document.ts";
-import { FrameBuffer } from '../../view/frame_buffer.ts';
-import { Surface } from "../../view/surface.d.ts";
-import { TermSurface } from "../../view/term_surface.ts";
-import { WebAdapter, PtyEventSource } from "../input.ts";
+import { WebAdapter, } from "../input.ts";
+import { App } from "../app.ts";
 
 type WindowEventMap = {
       error: ErrorEvent
@@ -15,23 +12,18 @@ type WindowEventMap = {
 }
 
 export class Window extends EventDispatcher<WindowEventMap> {
-      private readonly frameBuffer: FrameBuffer;
-      private readonly surface: Surface;
       public readonly document: Document;
-      public readonly events = new WebAdapter(new PtyEventSource());
+      public readonly events: WebAdapter;
+      public width: number = 20; 
+      public height: number = 20;
 
-      constructor(public width: number = 20, public height: number = 20, surface: Surface = new TermSurface()) {
+      constructor() {
             super();
-            this.surface = surface;
-            this.frameBuffer = new FrameBuffer(width, height);
-            this.document = new Document(width, height);
+            const app = App.new();
+            this.document = new Document(App.width, App.height);
+            this.events = new WebAdapter(app.events);
 
-            loop(() => {
-                  this.frameBuffer.clear();
-                  this.document.body.draw(this.frameBuffer);
-                  this.frameBuffer.draw(this.surface);
-                  this.dispatch('update', new Event('update'));
-            });
+            app.addEventListener('draw', () => this.document.body.draw(app.frameBuffer));
             
             this.dispatch('load', new Event('load'))
       }
